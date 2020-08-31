@@ -1,4 +1,4 @@
-import firebase from "firebase/app";
+import firebase from "firebase";
 import 'firebase/firestore';
 import 'firebase/auth';
 
@@ -12,10 +12,12 @@ const config = {
     appId: "1:333084045964:web:bb44298d72fa2e1b8b01a9"
 };
 
+
+
 firebase.initializeApp(config);
 
 export const auth = firebase.auth();
-export const firestore = firebase.firestore();
+export const firestore = firebase.database();
 
 // 获取google验证器
 const provider = new firebase.auth.GoogleAuthProvider();
@@ -25,5 +27,12 @@ export const singInWithGoogle = () => auth.signInWithPopup(provider);
 
 export default firebase;
 
-
-console.log(auth.onAuthStateChanged(user => console.log(user)));
+export const createUserProfileDocumnent = async (userAuth, additionalData) =>{
+    if (!userAuth) {
+        return;
+    }
+    console.log("从Firebase中获取数据")
+    firestore.ref('/user/displayName').on('value', function(snapshot) {
+        console.log(snapshot);
+    });
+}
